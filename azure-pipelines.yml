@@ -12,9 +12,6 @@ jobs:
     displayName: Get NPM Version
 
     steps:
-      - checkout: main
-        displayName: Checkout main branch
-      
       - script: |
           echo "##vso[task.setvariable variable=npmVersion;isoutput=true]`npm --version`"
         displayName: Get NPM Version
@@ -36,11 +33,14 @@ jobs:
     dependsOn: get_npm_updates
 
     steps:
-    - script: |
-        mv ./app/* .
-      displayName: Move server codes to current directort
+      - checkout: self
+        displayName: Checkout main branch
+    
+      - script: |
+          mv ./app/* .
+        displayName: Move server codes to current directory
 
-    - script: |
-        npm i
-      displayName: Install modules
+      - script: |
+          npm i
+        displayName: Install modules
     
