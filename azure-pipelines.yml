@@ -24,7 +24,7 @@ jobs:
     dependsOn: get_npm_version
     variables:
       current_npm_version: $[dependencies.get_npm_version.outputs['get_npm_version.npmVersion']]
-    condition: ne($(current_npm_version), $(npm_version))
+    condition: ne(variables.current_npm_version, variables.npm_version)
 
     steps:
       - script: |
