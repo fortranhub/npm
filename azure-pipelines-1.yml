@@ -1,0 +1,14 @@
+trigger:
+  branches:
+    - main
+
+jobs:
+  - deployment: test-deploy
+    environment:
+      name: sample-environment
+    strategy:
+     runOnce:
+       deploy:
+         steps:
+           - script: |
+               touch file
