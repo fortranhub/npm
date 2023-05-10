@@ -7,8 +7,8 @@ pool:
   name: 'Default'
 
 variables:
-  npm_version: "8.5.0"
- 
+  npm_version: "8.5.1"
+
 jobs:
   - job: get_npm_version
     displayName: Get NPM Version
@@ -18,18 +18,18 @@ jobs:
           echo "##vso[task.setvariable variable=npmVersion;isoutput=true]`npm --version`"
         displayName: Get NPM Version
         name: get_npm_version
-  
+
   - job: get_npm_updates
     dependsOn: get_npm_version
     variables:
       current_npm_version: $[dependencies.get_npm_version.outputs['get_npm_version.npmVersion']]
-    condition: ne(variables.current_npm_version, variables.npm_version)
+    condition: ne(dependencies.get_npm_version.outputs['get_npm_version.npmVersion'], variables.npm_version)
 
     steps:
       - script: |
           npm update
         displayName: Update NPM
-  
+
   - job: npm_build
     continueOnError: true
     dependsOn: get_npm_updates
@@ -37,7 +37,7 @@ jobs:
     steps:
       - checkout: self
         displayName: Checkout main branch
-    
+
       - script: |
           mv ./app/* .
         displayName: Move server codes to current directory
@@ -45,4 +45,3 @@ jobs:
       - script: |
           npm i
         displayName: Install modules
-    
